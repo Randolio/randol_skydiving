@@ -154,6 +154,7 @@ local function viewJumps()
                     { type = 'select', label = 'Parachute Styles', required = true, icon = 'fa-solid fa-fill', options = opts},
                     { type = 'color', label = 'Smoke Trail', required = true, default = '#eb4034'},
                 })
+                if not response then return end
                 local success = lib.callback.await('randol_skydiving:server:attemptStart', false, index)
                 if success then
                     startJump(data.coords, response[1], response[2])
