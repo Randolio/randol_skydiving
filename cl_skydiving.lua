@@ -130,6 +130,11 @@ local function startJump(coords, style, trail)
     DeleteEntity(HELI)
     DeleteEntity(PILOT)
     HELI, PILOT = nil
+    
+    SetModelAsNoLongerNeeded(Config.HeliModel)
+    SetModelAsNoLongerNeeded(Config.PilotModel)
+    SetModelAsNoLongerNeeded(`p_parachute_s`)
+    RemoveAnimDict('oddjobs@basejump@')
 end
 
 local function getStreetandZone(coords)
@@ -190,6 +195,7 @@ local function initPed()
     SetEntityInvincible(START_PED, true)
     FreezeEntityPosition(START_PED, true)
     TaskStartScenarioInPlace(START_PED, 'WORLD_HUMAN_CLIPBOARD', 0, true)
+    SetModelAsNoLongerNeeded(model)
 
     if Config.UseTarget then
         exports['qb-target']:AddTargetEntity(START_PED, {
