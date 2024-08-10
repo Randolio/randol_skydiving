@@ -1,6 +1,20 @@
 local Config = lib.require('config')
 local START_PED, HELI_CAM, START_ZONE, HELI, PILOT
 local isWaiting = false
+local oxtarget = GetResourceState('ox_target') == 'started'
+
+local function targetLocalEntity(entity, options, distance)
+    if oxtarget then
+        for _, option in ipairs(options) do
+            option.distance = distance
+            option.onSelect = option.action
+            option.action = nil
+        end
+        exports.ox_target:addLocalEntity(entity, options)
+    else
+        exports['qb-target']:AddTargetEntity(entity, { options = options, distance = distance })
+    end
+end
 
 local blip = AddBlipForCoord(Config.Ped.coords.xyz)
 SetBlipSprite(blip, 94)
@@ -176,7 +190,11 @@ local function removePed()
     if not DoesEntityExist(START_PED) then return end
 
     if Config.UseTarget then
-        exports['qb-target']:RemoveTargetEntity(START_PED, 'View Locations')
+        if oxtarget then
+            exports.ox_target:removeLocalEntity(START_PED, 'View Locations')
+        else
+            exports['qb-target']:RemoveTargetEntity(START_PED, 'View Locations')
+        end
     else
         exports.interact:RemoveLocalEntityInteraction(START_PED, 'skydive_guy')
     end
@@ -198,18 +216,13 @@ local function initPed()
     SetModelAsNoLongerNeeded(model)
 
     if Config.UseTarget then
-        exports['qb-target']:AddTargetEntity(START_PED, {
-            options = {
-                {
-                    icon = 'fa-solid fa-parachute-box',
-                    label = 'View Locations',
-                    action = function()
-                        viewJumps()
-                    end,
-                }
+        targetLocalEntity(START_PED, {
+            {
+                icon = 'fa-solid fa-parachute-box',
+                label = 'View Locations',
+                action = viewJumps,
             },
-            distance = 1.5,
-        })
+        }, 1.5)
     else
         exports.interact:AddLocalEntityInteraction({
             entity = START_PED,
