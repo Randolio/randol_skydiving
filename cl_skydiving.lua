@@ -1,10 +1,9 @@
 local Config = lib.require('config')
 local START_PED, HELI_CAM, START_ZONE, HELI, PILOT
 local isWaiting = false
-local oxtarget = GetResourceState('ox_target') == 'started'
 
 local function targetLocalEntity(entity, options, distance)
-    if oxtarget then
+    if GetResourceState('ox_target') == 'started' then
         for _, option in ipairs(options) do
             option.distance = distance
             option.onSelect = option.action
@@ -190,7 +189,7 @@ local function removePed()
     if not DoesEntityExist(START_PED) then return end
 
     if Config.UseTarget then
-        if oxtarget then
+        if GetResourceState('ox_target') == 'started' then
             exports.ox_target:removeLocalEntity(START_PED, 'View Locations')
         else
             exports['qb-target']:RemoveTargetEntity(START_PED, 'View Locations')
