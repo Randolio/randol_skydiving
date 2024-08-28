@@ -148,6 +148,39 @@ local function startJump(coords, style, trail)
     SetModelAsNoLongerNeeded(Config.PilotModel)
     SetModelAsNoLongerNeeded(`p_parachute_s`)
     RemoveAnimDict('oddjobs@basejump@')
+
+    if Config.TPPlayer.active then
+        lib.notify({
+            title = 'Base Jump',
+            description = 'You will be teleported back to the starting point in 3 minutes',
+            type = 'inform',
+            duration = Config.TPPlayer.time,
+            position = 'top-right',
+            icon = 'fa-solid fa-clock',
+            iconAnimation = 'spinReverse',
+        })
+        Wait(Config.TPPlayer.time)
+        lib.hideTextUI()
+
+        DoScreenFadeOut(1000)
+
+        Wait(2000)
+        SetEntityCoords(cache.ped, Config.TPPlayer.coords)
+        DoScreenFadeIn(2000)
+        lib.notify({
+            title = 'Base Jump',
+            description = 'Thank you for jumping with us, we hope to see you soon!',
+            type = 'success',
+            duration = 5000
+        })
+    else
+        lib.notify({
+            title = 'Base Jump',
+            description = 'Thank you for jumping with us, we hope to see you soon!',
+            type = 'success',
+            duration = 5000
+        })
+    end
 end
 
 local function getStreetandZone(coords)
