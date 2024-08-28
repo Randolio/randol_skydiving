@@ -22,5 +22,10 @@ return {
         {label = 'Sunrise', value = 13}
     },
     HeliModel = `maverick`,
-    PilotModel = `s_m_m_pilot_02`
+    PilotModel = `s_m_m_pilot_02`,
+    TPPlayer = {
+        active = true,
+        coords = vector3(-753.55, -1508.92, 4.01),
+        time = 1000 * 60 * 3, -- In minutes
+    }
 }
