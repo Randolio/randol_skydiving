@@ -26,5 +26,6 @@ return {
     TPPlayer = {
         active = true,
         coords = vector3(-753.55, -1508.92, 4.01),
+        time = 1000 * 60 * 3, -- In minutes
     }
 }
